@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os')
-const execFile = require('child_process').execFile;
+const childProcess = require('child_process');
 const crypto = require('crypto');
 const platform = os.platform();
 
@@ -9,6 +9,10 @@ const renderScriptPath = 'phantom-renderscript.js';
 const binaryName = `phantomjs-${((platform === 'darwin') ? 'macosx' : 'linux')}`;
 const phantomjs = path.resolve(`bin/${binaryName}`);
 
+const promisify = require("es6-promisify");
+const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
+const execFile = promisify(childProcess.execFile);
 
 export const print = async (event, context, callback) => {
 
@@ -40,29 +44,25 @@ export const print = async (event, context, callback) => {
   const outputFilePath = `${randomId}.${options.format}`;
   options.output = outputFilePath;
 
-  fs.writeFileSync(inputFilePath, html);
-
-  execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)],
-    (err, stdout, stderr) => {
-      if (err) {
-        callback(err, {
-          statusCode: 500,
-          body: JSON.stringify({
-            'error': err
-          }),
-        });
-      }
-
-      const output = fs.readFileSync(outputFilePath);
-      callback(null, {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: output.toString('base64')
-      });
+  try{
+    await writeFile(inputFilePath, html);
+    await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
+    const output = await readFile(outputFilePath);
+    callback(null, {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: output.toString('base64')
     });
-
+  }catch(err){
+    callback(err, {
+      statusCode: 500,
+      body: JSON.stringify({
+        'error': err
+      }),
+    });
+  }
 };
 
 

@@ -28,5 +28,7 @@
   "browser": {
     "vertx": false
   },
-  "dependencies": {}
+  "dependencies": {
+    "es6-promisify": "^5.0.0"
+  }
 }
