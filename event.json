@@ -1,0 +1,22 @@
+{
+  "body": {
+    "html": "<html> <head> <title> A Simple HTML Document </title> </head> <body> <p>This is a very simple HTML document</p> <p>It only has two paragraphs</p> </body> </html>",
+    "options": {
+      "format": "png",
+      "paperSize": {
+        "width": "154mm",
+        "height": "111mm",
+        "orientation": "landscape",
+        "margin": {
+          "top": "-6px",
+          "left": "-15px"
+        }
+      },
+      "viewportSize": {
+        "width": "154mm",
+        "height": "111mm"
+      },
+      "strategy": "dedicated-process"
+    }
+  }
+}

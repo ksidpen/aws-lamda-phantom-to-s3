@@ -57,3 +57,14 @@ typings/
 # dotenv environment variables file
 .env
 
+.webpack
+
+input.html
+output.pdf
+output.png
+output.jpg
+output.jpeg
+
+example
+
+yarn.lock
