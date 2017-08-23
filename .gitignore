@@ -59,6 +59,8 @@ typings/
 
 .webpack
 
+.serverless
+
 input.html
 output.pdf
 output.png
