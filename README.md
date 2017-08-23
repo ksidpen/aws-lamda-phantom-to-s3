@@ -6,6 +6,11 @@ This lambda function takes a HTML page and convert it into printable PDF using P
 ### Setup
 
 create *env.yml* for env vars
+``` yaml
+BUCKET_KEY:           ABVDE
+BUCKET_KEY_ID:        FGHSD
+BUCKET_NAME:          NICEBUKIT
+```
 
 For deployment
 ```
@@ -15,4 +20,8 @@ serverless deploy
 ### Development
 ```
 serverless offline start
+```
+or test a function
+```
+serverless invoke local --function print  --path event.json
 ```
