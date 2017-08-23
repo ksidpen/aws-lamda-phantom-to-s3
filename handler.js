@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const os = require('os')
@@ -8,10 +6,11 @@ const crypto = require('crypto');
 const platform = os.platform();
 
 const renderScriptPath = 'phantom-renderscript.js';
-const binaryName = 'phantomjs-' + ((platform === 'darwin') ? 'macosx' : 'linux');
-const phantomjs = path.resolve('bin/' + binaryName);
+const binaryName = `phantomjs-${((platform === 'darwin') ? 'macosx' : 'linux')}`;
+const phantomjs = path.resolve(`bin/${binaryName}`);
 
-module.exports.print = (event, context, callback) => {
+
+export const print = async (event, context, callback) => {
 
   const body = event.body;
   if (!body.html) {
@@ -25,7 +24,7 @@ module.exports.print = (event, context, callback) => {
   }
 
   const html = body.html;
-  const fileId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
+  const randomId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
   const options = body.options || {};
   options.viewportSize = options.viewportSize || {};
   options.paperSize = options.paperSize || {};
@@ -36,9 +35,9 @@ module.exports.print = (event, context, callback) => {
   options.cookies = options.cookies || [];
   options.format = options.format || 'pdf';
 
-  const inputFilePath = fileId+'.html';
+  const inputFilePath = `${randomId}.html`;
   options.input = inputFilePath;
-  const outputFilePath = fileId+'.' + options.format;
+  const outputFilePath = `${randomId}.${options.format}`;
   options.output = outputFilePath;
 
   fs.writeFileSync(inputFilePath, html);
@@ -66,10 +65,12 @@ module.exports.print = (event, context, callback) => {
 
 };
 
-module.exports.printToBucket = (event, context, callback) => {
+
+export const printToBucket = async  (event, context, callback) => {
 
 };
 
-module.exports.getFromBucket = (event, context, callback) => {
+
+export const getFromBucket = async  (event, context, callback) => {
 
 };

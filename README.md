@@ -23,5 +23,5 @@ serverless offline start
 ```
 or test a function
 ```
-serverless invoke local --function print  --path event.json
+serverless webpack invoke --function print  --path event.json
 ```
