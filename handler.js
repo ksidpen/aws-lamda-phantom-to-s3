@@ -14,19 +14,7 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const execFile = promisify(childProcess.execFile);
 
-export const print = async (event, context, callback) => {
-
-  const body = event.body;
-  if (!body.html) {
-    const err = 'html parameter is undefined';
-    return callback(err, {
-      statusCode: 500,
-      body: JSON.stringify({
-        'error': err
-      })
-    });
-  }
-
+const printToFile = async(body, context) => {
   const html = body.html;
   const randomId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
   const options = body.options || {};
@@ -44,10 +32,29 @@ export const print = async (event, context, callback) => {
   const outputFilePath = `${randomId}.${options.format}`;
   options.output = outputFilePath;
 
-  try{
-    await writeFile(inputFilePath, html);
-    await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
-    const output = await readFile(outputFilePath);
+  await writeFile(inputFilePath, html);
+  await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
+  return readFile(outputFilePath);
+}
+
+const report = (err, callback)=>{
+  callback(err, {
+    statusCode: 500,
+    body: JSON.stringify({
+      'error': err
+    })
+  });
+}
+
+export const print = async(event, context, callback) => {
+
+  const body = event.body;
+  if (!body.html) {
+    return report('html parameter is undefined', callback)
+  }
+
+  try {
+    const output = await printToFile(body, context);
     callback(null, {
       statusCode: 200,
       headers: {
@@ -55,22 +62,17 @@ export const print = async (event, context, callback) => {
       },
       body: output.toString('base64')
     });
-  }catch(err){
-    callback(err, {
-      statusCode: 500,
-      body: JSON.stringify({
-        'error': err
-      }),
-    });
+  } catch (err) {
+    return report(err, callback)
   }
 };
 
 
-export const printToBucket = async  (event, context, callback) => {
+export const printToBucket = async(event, context, callback) => {
 
 };
 
 
-export const getFromBucket = async  (event, context, callback) => {
+export const getFromBucket = async(event, context, callback) => {
 
 };
