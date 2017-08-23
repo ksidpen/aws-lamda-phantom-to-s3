@@ -2,7 +2,7 @@ service:                    serverless-pdf
 
 provider:
   name:                     aws
-  runtime:                  nodejs4.3
+  runtime:                  nodejs6.10
   stage:                    stage
   region:                   us-west-2
   profile:                  serverless
@@ -29,7 +29,6 @@ functions:
 
     getFromBucket:
       environment:          ${file(env.yml)}
-      timeout:              15
       handler:              handler.getFromBucket
       events:
         - http:
@@ -41,14 +40,9 @@ functions:
               querystrings:
                 id:         true
 
+custom:
+  webpackIncludeModules: true
+
 plugins:
   - serverless-webpack
   - serverless-offline
-
-package:
-  exclude:
-    - node_modules/**
-    - bin/phantomjs-macosx
-  include:
-    - phantom-renderscript.js
-    - bin/phantomjs-linux

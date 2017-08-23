@@ -41,8 +41,6 @@ module.exports.print = (event, context, callback) => {
   const outputFilePath = fileId+'.' + options.format;
   options.output = outputFilePath;
 
-
-
   fs.writeFileSync(inputFilePath, html);
 
   execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)],
@@ -67,8 +65,6 @@ module.exports.print = (event, context, callback) => {
     });
 
 };
-
-//console.log(process.env.BUCKET_KEY);
 
 module.exports.printToBucket = (event, context, callback) => {
 
