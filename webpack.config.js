@@ -7,8 +7,13 @@ module.exports = {
   target: 'node',
   externals: [nodeExternals()],
   plugins: [new CopyWebpackPlugin([{
-    from: path.join(__dirname, "/bin/phantomjs-linux"), to: "bin/"
-  }]) ],
+      from: path.join(__dirname, "/bin/phantomjs-linux"),
+      to: "bin/"
+    },
+    {
+      from: path.join(__dirname, "phantom-renderscript.js")
+    }
+  ])],
   module: {
     loaders: []
   }
