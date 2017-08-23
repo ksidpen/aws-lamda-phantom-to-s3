@@ -5,6 +5,8 @@ This lambda function takes a HTML page and convert it into printable PDF using P
 
 ### Setup
 
+create *env.yml* for env vars
+
 For deployment
 ```
 serverless deploy

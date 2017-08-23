@@ -1,21 +1,45 @@
-service: serverless-pdf
+service:                    serverless-pdf
 
 provider:
-  name: aws
-  runtime: nodejs4.3
-  stage: stage
-  region: us-west-2
-  profile: serverless
+  name:                     aws
+  runtime:                  nodejs4.3
+  stage:                    stage
+  region:                   us-west-2
+  profile:                  serverless
 
 functions:
   print:
-    timeout: 15
-    handler: handler.print
+    timeout:                15
+    handler:                handler.print
     events:
       - http:
-          method: post
-          path: print
-          cors: true
+          method:           post
+          path:             print
+          cors:             true
+
+  printToBucket:
+    environment:            ${file(env.yml)}
+    timeout:                15
+    handler:                handler.printToBucket
+    events:
+      - http:
+          method:           post
+          path:             printToBucket
+          cors:             true
+
+    getFromBucket:
+      environment:          ${file(env.yml)}
+      timeout:              15
+      handler:              handler.getFromBucket
+      events:
+        - http:
+            method:         get
+            path:           getFromBucket
+            cors:           true
+            request:
+            parameters:
+              querystrings:
+                id:         true
 
 plugins:
   - serverless-webpack

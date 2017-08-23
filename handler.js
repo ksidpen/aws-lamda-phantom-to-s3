@@ -4,17 +4,28 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os')
 const execFile = require('child_process').execFile;
+const crypto = require('crypto');
 const platform = os.platform();
 
-const inputFilePath = 'input.html';
 const renderScriptPath = 'phantom-renderscript.js';
+const binaryName = 'phantomjs-' + ((platform === 'darwin') ? 'macosx' : 'linux');
+const phantomjs = path.resolve('bin/' + binaryName);
 
 module.exports.print = (event, context, callback) => {
-  const binaryName = 'phantomjs-' + ((platform === 'darwin') ? 'macosx' : 'linux');
-  const phantomjs = path.resolve('bin/' + binaryName);
 
   const body = event.body;
+  if (!body.html) {
+    const err = 'html parameter is undefined';
+    return callback(err, {
+      statusCode: 500,
+      body: JSON.stringify({
+        'error': err
+      })
+    });
+  }
+
   const html = body.html;
+  const fileId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
   const options = body.options || {};
   options.viewportSize = options.viewportSize || {};
   options.paperSize = options.paperSize || {};
@@ -25,19 +36,12 @@ module.exports.print = (event, context, callback) => {
   options.cookies = options.cookies || [];
   options.format = options.format || 'pdf';
 
+  const inputFilePath = fileId+'.html';
   options.input = inputFilePath;
-  const outputFilePath = 'output.' + options.format;
+  const outputFilePath = fileId+'.' + options.format;
   options.output = outputFilePath;
 
-  if (!html) {
-    const err = 'html parameter is undefined';
-    return callback(err, {
-      statusCode: 500,
-      body: JSON.stringify({
-        'error': err
-      })
-    });
-  }
+
 
   fs.writeFileSync(inputFilePath, html);
 
@@ -61,5 +65,15 @@ module.exports.print = (event, context, callback) => {
         body: output.toString('base64')
       });
     });
+
+};
+
+//console.log(process.env.BUCKET_KEY);
+
+module.exports.printToBucket = (event, context, callback) => {
+
+};
+
+module.exports.getFromBucket = (event, context, callback) => {
 
 };

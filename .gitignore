@@ -61,12 +61,14 @@ typings/
 
 .serverless
 
-input.html
-output.pdf
-output.png
-output.jpg
-output.jpeg
+*.html
+*.pdf
+*.png
+*.jpg
+*.jpeg
 
 example
 
 yarn.lock
+
+env.yml
