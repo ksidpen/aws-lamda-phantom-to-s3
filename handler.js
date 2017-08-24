@@ -14,10 +14,10 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const execFile = promisify(childProcess.execFile);
 
-const printToFile = async(body, context) => {
-  const html = body.html;
+const printToFile = async(args, context) => {
+  const html = args.html;
   const randomId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
-  const options = body.options || {};
+  const options = args.options || {};
   options.viewportSize = options.viewportSize || {};
   options.paperSize = options.paperSize || {};
   options.settings = options.settings || {};
@@ -32,8 +32,10 @@ const printToFile = async(body, context) => {
   const outputFilePath = `${randomId}.${options.format}`;
   options.output = outputFilePath;
 
+  const encodedOptions = JSON.stringify(options);
+
   await writeFile(inputFilePath, html);
-  await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
+  await execFile(phantomjs, [renderScriptPath, null, encodedOptions]);
   return readFile(outputFilePath);
 }
 
