@@ -90,10 +90,7 @@ export const printToBucket = async(event, context, callback) => {
           Body: fileBuffer,
           Bucket: process.env.BUCKET_NAME
         }, (err, data) => {
-          if (err)
-            reject(err)
-
-          resolve(data);
+          (err)? reject(err) : resolve(data);
         });
     })
     callback(null, {
@@ -120,10 +117,7 @@ export const getFromBucket = async(event, context, callback) => {
         Bucket: process.env.BUCKET_NAME,
         Key: fileName
       }, (err, data) => {
-        if (err)
-          reject(err)
-
-        resolve(data);
+        (err)? reject(err) : resolve(data);
       })
     })
     callback(null, {
