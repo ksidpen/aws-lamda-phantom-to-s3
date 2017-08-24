@@ -24,7 +24,7 @@ module.exports = {
   entry: './handler.js',
   target: 'node',
   devtool: 'source-map',
-  externals: [nodeExternals()],
+  externals: [/aws-sdk/, nodeExternals()],
   plugins: [new CopyWebpackPlugin([{
       from: path.join(__dirname, "/bin/phantomjs-linux"),
       to: "bin/"
