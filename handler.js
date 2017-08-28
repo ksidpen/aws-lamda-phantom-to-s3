@@ -34,9 +34,9 @@ const prepareOptions = async(args, context) =>{
   options.cookies = options.cookies || [];
   options.format = options.format || 'pdf';
 
-  const inputFilePath = `${randomId}.html`;
+  const inputFilePath = `/tmp/${randomId}.html`;
   options.input = inputFilePath;
-  const outputFilePath = `${randomId}.${options.format}`;
+  const outputFilePath = `/tmp/${randomId}.${options.format}`;
   options.output = outputFilePath;
 
   await writeFile(inputFilePath, html);
@@ -61,7 +61,7 @@ const report = (err, callback) => {
 
 export const print = async(event, context, callback) => {
 
-  const body = event.body;
+  const body = JSON.parse(event.body);
   if (!body.html) {
     return report('html parameter is undefined', callback)
   }
@@ -82,7 +82,7 @@ export const print = async(event, context, callback) => {
 
 
 export const printToBucket = async(event, context, callback) => {
-  const body = event.body;
+  const body = JSON.parse(event.body);
   if (!body.id) {
     return report('id parameter is undefined', callback)
   }
@@ -112,7 +112,7 @@ export const printToBucket = async(event, context, callback) => {
 
 
 export const getFromBucket = async(event, context, callback) => {
-  const body = event.body;
+  const body = JSON.parse(event.body);
   if (!body.id) {
     return report('id parameter is undefined', callback)
   }

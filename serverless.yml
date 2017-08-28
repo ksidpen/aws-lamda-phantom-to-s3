@@ -17,6 +17,16 @@ provider:
   region:                 eu-west-1
   profile:                serverless
 
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - "s3:ListBucket"
+      - "s3:Put*"
+      - "s3:GetObject"
+    Resource:
+      - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME"
+      - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME/*"
+
 functions:
   print:
     timeout:              15
