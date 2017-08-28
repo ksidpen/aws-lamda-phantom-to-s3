@@ -25,5 +25,9 @@ serverless offline start
 ```
 or test a function
 ```
-serverless webpack invoke --function print  --path event.json
+serverless webpack invoke --function print  --path event.json -s dev
+```
+or get log tail
+```
+serverless logs -f print -s dev
 ```

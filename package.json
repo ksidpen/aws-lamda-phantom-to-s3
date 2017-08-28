@@ -16,7 +16,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
-    "copy-webpack-plugin": "^4.0.1",
+    "copy-webpack-plugin": "https://github.com/deryni/copy-webpack-plugin.git#copy-file-permissions",
     "js-yaml": "^3.9.1",
     "serverless-offline": "^3.15.3",
     "serverless-webpack": "^2.2.2",

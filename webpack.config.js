@@ -27,11 +27,12 @@ module.exports = {
   externals: [/aws-sdk/, nodeExternals()],
   plugins: [new CopyWebpackPlugin([{
       from: path.join(__dirname, "/bin/phantomjs-linux"),
-      to: "bin/"
+      to: "bin/",
+      copyPermissions: true
     },
     {
       from: path.join(__dirname, "phantom-renderscript.js")
-    }
+    },
   ])],
   module: {
     rules: [{
