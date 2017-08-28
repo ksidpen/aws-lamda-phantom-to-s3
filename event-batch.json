@@ -1,0 +1,46 @@
+{
+  "body": {
+    "batch" : [
+      {
+        "html": "<html> <head> <title> A Simple HTML Document </title> </head> <body> <p>This is a very simple HTML document</p> <p>It only has two paragraphs</p> </body> </html>",
+        "id": "somefile",
+        "options": {
+          "format": "png",
+          "paperSize": {
+            "width": "154mm",
+            "height": "111mm",
+            "orientation": "landscape",
+            "margin": {
+              "top": "-6px",
+              "left": "-15px"
+            }
+          },
+          "viewportSize": {
+            "width": "154mm",
+            "height": "111mm"
+          }
+        }
+      },
+      {
+        "html": "<html> <head> <title> A More Simple HTML Document For things </title> </head> <body> <p>This is a very simple HTML document</p> <p>It only has two paragraphs</p> </body> </html>",
+        "id": "someotherfile",
+        "options": {
+          "format": "png",
+          "paperSize": {
+            "width": "154mm",
+            "height": "111mm",
+            "orientation": "landscape",
+            "margin": {
+              "top": "-6px",
+              "left": "-15px"
+            }
+          },
+          "viewportSize": {
+            "width": "154mm",
+            "height": "111mm"
+          }
+        }
+      }
+    ]
+  }
+}
