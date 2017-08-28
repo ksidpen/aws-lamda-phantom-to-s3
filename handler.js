@@ -17,9 +17,13 @@ const execFile = promisify(childProcess.execFile);
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
 
-const printToFile = async(args, context) => {
+const prepareOptions = async(args, context) =>{
   const html = args.html;
-  const randomId = crypto.createHash('md5').update(context.logStreamName).digest('hex');
+  const fileName = args.id;
+  const randomId = crypto
+  .createHash('md5')
+  .update(fileName || context.logStreamName)
+  .digest('hex');
   const options = args.options || {};
   options.viewportSize = options.viewportSize || {};
   options.paperSize = options.paperSize || {};
@@ -35,11 +39,15 @@ const printToFile = async(args, context) => {
   const outputFilePath = `${randomId}.${options.format}`;
   options.output = outputFilePath;
 
-  const encodedOptions = JSON.stringify(options);
-
   await writeFile(inputFilePath, html);
-  await execFile(phantomjs, [renderScriptPath, null, encodedOptions]);
-  return readFile(outputFilePath);
+
+  return options;
+}
+
+const printToFile = async(args, context) => {
+  const options = await prepareOptions(args, context);
+  await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
+  return readFile(options.output);
 }
 
 const report = (err, callback) => {
