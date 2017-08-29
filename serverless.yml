@@ -13,48 +13,41 @@ custom:
 provider:
   name:                   aws
   runtime:                nodejs6.10
-  stage:                  prod
+  stage:                  dev
   region:                 eu-west-1
   profile:                serverless
-
-iamRoleStatements:
-  - Effect: "Allow"
-    Action:
-      - "s3:ListBucket"
-      - "s3:Put*"
-      - "s3:GetObject"
-    Resource:
-      - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME"
-      - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME/*"
+  iamRoleStatements:
+    - Effect:             "Allow"
+      Action:
+        - "s3:Put*"
+        - "s3:GetObject"
+      Resource:           "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME/*"
 
 functions:
   print:
-    timeout:              15
     handler:              handler.print
+    timeout:              15
     events:
       - http:
           method:         post
           path:           print
-          cors:           true
 
   printToBucket:
+    handler:              handler.printToBucket
     environment:          ${file(env.yml):${opt:stage}}
     timeout:              15
-    handler:              handler.printToBucket
     events:
       - http:
           method:         post
           path:           printToBucket
-          cors:           true
 
   getFromBucket:
-    environment:          ${file(env.yml):${opt:stage}}
     handler:              handler.getFromBucket
+    environment:          ${file(env.yml):${opt:stage}}
     events:
       - http:
           method:         get
           path:           getFromBucket
-          cors:           true
           request:
           parameters:
             querystrings:
