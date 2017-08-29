@@ -59,9 +59,13 @@ const report = (err, callback) => {
   });
 }
 
+const getRequestBody = (event)=>{
+  return (typeof event.body === 'string')? JSON.parse(event.body) : event.body;
+}
+
 export const print = async(event, context, callback) => {
 
-  const body = JSON.parse(event.body);
+  const body = getRequestBody(event);
   if (!body.html) {
     return report('html parameter is undefined', callback)
   }
@@ -70,9 +74,6 @@ export const print = async(event, context, callback) => {
     const output = await printToFile(body, context);
     callback(null, {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
       body: output.toString('base64')
     });
   } catch (err) {
@@ -82,7 +83,7 @@ export const print = async(event, context, callback) => {
 
 
 export const printToBucket = async(event, context, callback) => {
-  const body = JSON.parse(event.body);
+  const body = getRequestBody(event);
   if (!body.id) {
     return report('id parameter is undefined', callback)
   }
@@ -112,7 +113,7 @@ export const printToBucket = async(event, context, callback) => {
 
 
 export const getFromBucket = async(event, context, callback) => {
-  const body = JSON.parse(event.body);
+  const body = getRequestBody(event);
   if (!body.id) {
     return report('id parameter is undefined', callback)
   }
