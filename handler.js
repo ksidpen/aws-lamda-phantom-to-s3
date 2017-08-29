@@ -25,6 +25,7 @@ const prepareOptions = async(args, context) =>{
   .update(fileName || context.logStreamName)
   .digest('hex');
   const options = args.options || {};
+  options.id = randomId;
   options.viewportSize = options.viewportSize || {};
   options.paperSize = options.paperSize || {};
   options.settings = options.settings || {};
@@ -47,7 +48,12 @@ const prepareOptions = async(args, context) =>{
 const printToFile = async(args, context) => {
   const options = await prepareOptions(args, context);
   await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
-  return readFile(options.output);
+
+  const ghostscriptOutput = `/tmp/${options.id}-gs.pdf`;
+  await execFile('gs', ['-o', ghostscriptOutput, '-sDEVICE=pdfwrite',
+  '-dPDFSETTINGS=/prepress', options.output]);
+
+  return readFile(ghostscriptOutput);
 }
 
 const report = (err, callback) => {
@@ -72,8 +78,12 @@ export const print = async(event, context, callback) => {
 
   try {
     const output = await printToFile(body, context);
+
     callback(null, {
       statusCode: 200,
+      headers: {
+          'Content-Type': 'application/pdf'
+      },
       body: output.toString('base64')
     });
   } catch (err) {
