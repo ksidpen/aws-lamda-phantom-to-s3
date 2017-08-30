@@ -49,6 +49,9 @@ const printToFile = async(args, context) => {
   const options = await prepareOptions(args, context);
   await execFile(phantomjs, [renderScriptPath, null, JSON.stringify(options)]);
 
+  if(options.format!=='pdf')
+    return readFile(options.output);
+
   const ghostscriptOutput = `/tmp/${options.id}-gs.pdf`;
   await execFile('gs', ['-o', ghostscriptOutput, '-sDEVICE=pdfwrite',
   '-dPDFSETTINGS=/prepress', options.output]);
@@ -81,9 +84,6 @@ export const print = async(event, context, callback) => {
 
     callback(null, {
       statusCode: 200,
-      headers: {
-          'Content-Type': 'application/pdf'
-      },
       body: output.toString('base64')
     });
   } catch (err) {

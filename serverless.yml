@@ -19,14 +19,17 @@ provider:
   iamRoleStatements:
     - Effect:             "Allow"
       Action:
+        - "s3:ListBucket"
         - "s3:Put*"
         - "s3:GetObject"
-      Resource:           "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME/*"
+      Resource:
+        - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME"
+        - "arn:aws:s3:::file(env.yml):${opt:stage}.BUCKET_NAME/*"
 
 functions:
   print:
     handler:              handler.print
-    timeout:              15
+    timeout:              60
     events:
       - http:
           method:         post
@@ -35,7 +38,7 @@ functions:
   printToBucket:
     handler:              handler.printToBucket
     environment:          ${file(env.yml):${opt:stage}}
-    timeout:              15
+    timeout:              60
     events:
       - http:
           method:         post

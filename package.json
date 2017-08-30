@@ -18,7 +18,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "copy-webpack-plugin": "https://github.com/deryni/copy-webpack-plugin.git#copy-file-permissions",
     "js-yaml": "^3.9.1",
-    "serverless-offline": "^3.15.3",
+    "serverless-offline": "https://github.com/bebbi/serverless-offline.git#fix_requestlimit",
     "serverless-webpack": "^2.2.2",
     "webpack": "^3.5.5",
     "webpack-node-externals": "^1.6.0",

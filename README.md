@@ -8,8 +8,6 @@ This lambda function takes a HTML page and convert it into printable PDF using P
 create *env.yml* for env vars
 ``` yaml
 dev:
-  AWS_ACCESS_KEY_ID:     ABCDEFGH
-  AWS_SECRET_ACCESS_KEY: ABC
   BUCKET_NAME:           MABUKIT-BETA
 
 production:
