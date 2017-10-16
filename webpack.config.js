@@ -31,6 +31,10 @@ module.exports = {
       copyPermissions: true
     },
     {
+      from: path.join(__dirname, "/svg"),
+      to: "svg/"
+    },
+    {
       from: path.join(__dirname, "phantom-renderscript.js")
     },
   ])],

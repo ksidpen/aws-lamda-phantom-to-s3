@@ -16,9 +16,23 @@ const execFile = promisify(childProcess.execFile);
 
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
+const twemoji = require('twemoji');
+const cheerio = require('cheerio');
 
 const prepareOptions = async(args, context) =>{
-  const html = args.html;
+
+  var html = args.html;
+  html = twemoji.parse(html, {
+      folder: '/svg',
+      ext: '.svg',
+      base: path.resolve('.')
+  });
+  const parsedHtml = cheerio.load(html);
+  parsedHtml
+  ('head')
+  .append('<style>img.emoji {height:0.8em;width:1em;vertical-align:-0.1em;}</style>')
+  html = parsedHtml.html();
+
   const fileName = args.id;
   const randomId = crypto
   .createHash('md5')
