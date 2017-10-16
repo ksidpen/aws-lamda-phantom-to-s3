@@ -30,7 +30,7 @@ const prepareOptions = async(args, context) =>{
   const parsedHtml = cheerio.load(html);
   parsedHtml
   ('head')
-  .append('<style>img.emoji {height:0.8em;width:1em;vertical-align:-0.1em;}</style>')
+  .append('<style>img.emoji {height: 1em;width: 1.3em;margin: .1em;vertical-align: text-bottom;}</style>')
   html = parsedHtml.html();
 
   const fileName = args.id;
