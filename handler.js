@@ -25,7 +25,7 @@ const prepareOptions = async(args, context) =>{
   html = twemoji.parse(html, {
       folder: '/svg',
       ext: '.svg',
-      base: path.resolve('.')
+      base: path.resolve('node_modules/twemoji/2')
   });
   const parsedHtml = cheerio.load(html);
   parsedHtml

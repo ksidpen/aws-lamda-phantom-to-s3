@@ -23,7 +23,7 @@ serverless deploy
 requires [ghostscript](https://www.ghostscript.com/)
 
 ```
-serverless offline start
+serverless offline start -s dev
 ```
 or test a function
 ```
